@@ -28,6 +28,16 @@ authRouter.post("/login", async (req, res) => {
   const user = await User.findOne({ email: email, password: password });
   if (user) {
     // create token
+    const token = jwt.sign(
+      {
+        id: user._id,
+      },
+      "mysecretkey"
+    );
+    res.send({
+      success: true,
+      token: token,
+    });
   } else {
     res.send({
       authorized: false,

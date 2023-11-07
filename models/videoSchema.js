@@ -1,40 +1,37 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 50,
-  },
-  password: {
+const videoSchema = mongoose.Schema({
+  videoId: {
     type: String,
     required: true,
   },
-  username: {
+  url: {
     type: String,
+  },
+  title: {
+    type: String,
+  },
+  description: {
+    type: String,
+  },
+  views: {
+    type: Number,
   },
   thumbnail: {
     type: String,
   },
-  videos: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Video",
-    },
-  ],
-  likedVideos: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Video",
-    },
-  ],
-  subscribers: {
-    type: Number,
-    default: 0,
+  channel: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment",
+    },
+  ],
 });
 
-const User = mongoose.model("User", userSchema);
+const Video = mongoose.model("Video", videoSchema);
 
-module.exports = User;
+module.exports = Video;
