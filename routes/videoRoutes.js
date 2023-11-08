@@ -41,4 +41,40 @@ videoRouter.post("/video", authMiddleware, async (req, res) => {
   }
 });
 
+videoRouter.get("/subscribe/:id", authMiddleware, async (req, res) => {
+  try {
+    const channelId = req.params.id;
+    const channel = await User.findById(channelId);
+    channel.subscribers++;
+    await channel.save();
+    res.send(channel);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+videoRouter.get("/like/:id", authMiddleware, async (req, res) => {
+  try {
+    const userID = req.user.id;
+    const user = await User.findById(userID);
+    const videoId = req.params.id;
+    const video = await Video.findById(videoId);
+    video.likes++;
+    user.likedVideos.push(video._id);
+    await user.save();
+    await video.save();
+    res.send(video);
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+  }
+});
+
+videoRouter.post("/comment", async (req, res) => {
+  const data = req.body;
+  const comment = new Comment(data);
+  await comment.save();
+  res.send(comment);
+});
+
 module.exports = videoRouter;
